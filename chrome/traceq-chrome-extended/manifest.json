@@ -1,0 +1,56 @@
+{
+	"manifest_version": 3,
+	"name": "Traceq Chrome Extended",
+	"version": "1.0.0",
+	"minimum_chrome_version": "120",
+	"description": "Traceq Chrome Extended",
+    "icons": {
+        "16": "images/icons8-security-configuration-16.png",
+        "32": "images/icons8-security-configuration-32.png",
+        "48": "images/icons8-security-configuration-48.png",
+        "128": "images/icons8-security-configuration-100.png"
+    },
+	"permissions": [
+		"scripting",
+		"privacy",
+        "storage"
+	],
+	"host_permissions": [
+		"<all_urls>"
+	],
+	"background": {
+		"service_worker": "background/background.js"
+	},
+	"content_scripts": [
+		{
+            "matches": [
+                "http://localhost/traceq-task/traceqlabs-credential-masking/ad-orders?*",
+                "http://localhost/traceq-task/traceqlabs-credential-masking/ad-orders/*",
+                "https://traceqlabs.com/ad-orders?*",
+                "https://traceqlabs.com/ad-orders/*"
+            ],
+            "js": [
+                "scripts/app_script/index.js"
+            ]
+        },
+        {
+            "matches": [
+                "http://localhost/traceq-task/traceqlabs-credential-masking/*",
+                "https://traceqlabs.com/*"
+            ],
+            "js": [
+                "scripts/app_script/user.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://tapestry.fidlar.com/*",
+                "https://icounty.org/*",
+                "https://www.titlesearcher.com/*",
+                "https://ecclix.com/*",
+                "https://www.doxpop.com/*"
+             ],
+            "js": ["scripts/logging/capture.js"]
+        }
+	]
+}
