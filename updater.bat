@@ -1,20 +1,21 @@
 
-REM CHANGE THE DIRECTORY TO THE CHROME FOLDER
+rem CHANGE THE DIRECTORY TO THE CHROME FOLDER
 cd C:\Traceq-extensions-main\chrome
 
-REM DOWNLOAD THE ZIP FILE INSIDE THE CHROME FOLDER
-curl "https://extension-provider.onrender.com/traceq-chrome-extended.zip" -O "traceq-chrome-extended.zip" 
+rem DOWNLOAD THE ZIP FILE INSIDE THE CHROME FOLDER
+curl "https://extension-provider.onrender.com/traceq-chrome-extended.zip" -O "traceq-chrome-extended.zip"
 
-REM REMOVE FOLDER - TRACEQ-CHROME-EXTENDED
-RMDIR "C:/Traceq-extensions-main/chrome/traceq-chrome-extended" /S /Q
+rem RENAME FOLDER - TRACEQ-CHROME-EXTENDED
+rename traceq-chrome-extended traceq-chrome-extended-old
 
-REM CREATE FOLDER - TRACEQ-CHROME-EXTENDED
-mkdir "C:/Traceq-extensions-main/chrome/traceq-chrome-extended"
+rem CREATE FOLDER - TRACEQ-CHROME-EXTENDED
+mkdir "traceq-chrome-extended"
 
-REM UNZIP THE FOLDER AND REPLACE THE EXISTING FOLDER CONTENT
-tar -xf traceq-chrome-extended.zip -C "C:/Traceq-extensions-main/chrome/traceq-chrome-extended"
+rem UNZIP THE FOLDER AND REPLACE THE EXISTING FOLDER CONTENT
+tar -xf traceq-chrome-extended.zip -C "traceq-chrome-extended"
 
-REM DELETE THE DOWNLOADED ZIP FILE
+rem DELETE THE DOWNLOADED ZIP FILE AND BACKUP FILE
 del traceq-chrome-extended.zip
+rmdir -R traceq-chrome-extended-old /S /Q
 
 PAUSE

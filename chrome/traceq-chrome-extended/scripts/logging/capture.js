@@ -42,6 +42,9 @@ class Capture{
 		else if(obj.url.includes("doxpop.com")){
 			obj.doxpop();
 		}
+		else if(obj.url.includes("texasfile.com")){
+			obj.texasfile();
+		}
 	}
 	tapestry(){
 		const SEARCH_BTN_ID = "ContentPlaceHolder1_btnSearch";
@@ -221,19 +224,19 @@ class Capture{
 			}
 			
 			switch(pathname){
-				case "/common/CreateCcPayment":			
+			case "/common/CreateCcPayment":			
 				document.querySelector(`#receipt_detail #done_button`)?.removeEventListener("click", subscription_btn_event);			// SUBSCRIPTION	
 				document.querySelector(`#receipt_detail #done_button`)?.addEventListener("click", subscription_btn_event);				// SUBSCRIPTION	
 				break;	
 
-				case "/":
-				case "/court/":
-				case "/recorder/":
-				case "/tax_warrant/":
-				case "/court/CaseSearch":
-				case "/court/JudgmentSearch":
-				case "/recorder/FindRecordedDocuments":
-				case "/tax_warrant/TaxWarrantSearch":				
+			case "/":
+			case "/court/":
+			case "/recorder/":
+			case "/tax_warrant/":
+			case "/court/CaseSearch":
+			case "/court/JudgmentSearch":
+			case "/recorder/FindRecordedDocuments":
+			case "/tax_warrant/TaxWarrantSearch":				
 				document.querySelectorAll("#page__body__main form")?.forEach((form) => { btn_event(form); });							// SEARCHES	& ADVANCED SEARCHES
 				document.querySelectorAll("#page__topbar form[id='page__topbar__widget']")?.forEach((form) => { btn_event(form); });	// HEADER FORM
 				document.querySelectorAll("div[class^='app-result-table_results_']")?.forEach((div) => {								// RESULT TABLE
@@ -245,7 +248,7 @@ class Capture{
 				});
 				break;
 
-				default: break;					                  
+			default: break;					                  
 			}
 		}
 		attach_event();
@@ -253,6 +256,25 @@ class Capture{
 		setInterval(() => {
 			try{ attach_event(); }
 			catch(error){ console.log(error); }	
+		}, 2000);
+	}
+	texasfile(){
+		const event = () => {
+			let amount_ele = document.querySelector(".Receipt-total--amount");
+			let amount = amount_ele?.textContent.trim();
+			this.send_activity("SUBSCRIPTION", "TEXAS-FILE", amount);
+		}
+
+		// SUBSCRIPTION
+		setInterval(() => {
+			const purchase_btns = document.querySelectorAll(".addFundsBtn");
+			purchase_btns.forEach((btn, i) => {
+				let text = btn.textContent?.trim();
+				if(text == "Purchase"){
+					btn.removeEventListener("click", event);
+					btn.addEventListener("click", event);
+				}
+			})
 		}, 2000);
 	}
 	async send_activity(activity, application="", amount=null){

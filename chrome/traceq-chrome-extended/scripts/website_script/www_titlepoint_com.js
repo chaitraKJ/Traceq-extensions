@@ -31,12 +31,13 @@ function go_to_login(){
 							if(next_btn && username_input){
 								clearInterval(mainInterval);
 
-								username_input.setAttribute("readonly", true);
-								username_input.value = atob(username);;
+								username_input.click();							
+								username_input.value = atob(username);
 								username_input.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
-								username_input.click();
-								next_btn.click();
+								username_input.setAttribute("readonly", true);
 
+								next_btn.click();
+								
 								let interval = setInterval(async () => {
 									try{
 										const password_input = document.getElementById("input61");
@@ -47,12 +48,12 @@ function go_to_login(){
 											Static_global.password_input = password_input.closest('div');
 											var myp5 = new p5(s);
 
-											password_input.setAttribute("readonly", true);
+											password_input.click();										
 											password_input.style.filter = "blur(5px)";															
 											password_input.value = atob(password);
 											password_input.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
-											password_input.click();
-
+											password_input.setAttribute("readonly", true);
+											
 											await chrome.runtime.sendMessage({
 												type: "UNREGISTER"
 											});

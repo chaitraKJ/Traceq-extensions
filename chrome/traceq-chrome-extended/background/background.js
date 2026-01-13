@@ -3,10 +3,10 @@ console.log("TraceQ Background Service Worker");
 const LOCAL_SITE_URL = "http://localhost/traceq-task/traceqlabs-credential-masking";
 const SITE_URL = "https://traceqlabs.com";
 
-const MAIN_URL = SITE_URL;
+const MAIN_URL = LOCAL_SITE_URL;
 
+// RUNS WHEN EXTENSION IS INSTALLED OR UPDATED
 chrome.runtime.onInstalled.addListener(async () => {
-	await chrome.storage.local.clear();
 	await chrome.scripting.unregisterContentScripts();
 });
 
@@ -83,14 +83,42 @@ const create_new_tab = (url) => {
 }
 
 const inject_script = (tab, file) => {
+	return new Promise(async (resolve, reject) => {
+		try{
+			const inject_function = (tabId, info, tab) => {
+				if (tabId === tab.id) {
+					chrome.tabs.onUpdated.removeListener(inject_function);
+					chrome.scripting.executeScript({
+						target: { tabId: tab.id , allFrames: true},
+						files : ["scripts/mask_script/p5.js", "scripts/mask_script/mask_input.js", "scripts/mask_script/canvas_generator.js", `scripts/website_script/${file}.js`]
+					})
+					.then(() => {
+						console.log("SUCCESS : ALL SCRIPTS EXECUTED");
+						resolve(true);
+					})
+					.catch((error) => {
+						console.log(error);
+						reject(new Error(error));
+					});
+				}
+			}
+			chrome.tabs.onUpdated.addListener(inject_function);
+		}
+		catch(error){
+			reject(new Error(error));
+		}		
+	});
+}
+
+const register_Script = (url, file) => {
 	return new Promise((resolve, reject) => {
-		chrome.scripting.executeScript({
-			target: { tabId: tab.id },
-			files : ["scripts/mask_script/p5.js", "scripts/mask_script/mask_input.js", "scripts/mask_script/canvas_generator.js", `scripts/website_script/${file}.js`]
-		})
+		chrome.scripting.registerContentScripts([{
+			id: "default_id",
+			matches: [url],
+			js: ["scripts/mask_script/p5.js", "scripts/mask_script/mask_input.js", "scripts/mask_script/canvas_generator.js", `scripts/website_script/${file}.js`]
+		}])
 		.then(() => {
-			console.log("SUCCESS : RIGHT MOUSE CLICK AND COPY/PASTE/CUT/... FUNCTIONALITIES DISABLED");
-			resolve(true);
+			console.log("SUCCESS : ALL SCRIPTS REGISTERED");
 		})
 		.catch((error) => {
 			console.log(error);
@@ -134,7 +162,7 @@ async function handleMessages(message, sender, sendResponse) {
 
 			await disable_password_sharing();
 
-			const result = await fetch_application_data(application_id); 
+			const result = await fetch_application_data(application_id);
 
 			tab = (tab_type == "NEW") ? await create_new_tab(result['url']) : sender['tab'];
 
@@ -162,17 +190,7 @@ async function handleMessages(message, sender, sendResponse) {
 			let file_name = message['file_name'];
 
 			if(file_name && url){
-				chrome.scripting.registerContentScripts([{
-					id: "default_id",
-					matches: [url],
-					js: ["scripts/mask_script/p5.js", "scripts/mask_script/mask_input.js", "scripts/mask_script/canvas_generator.js", `scripts/website_script/${file_name}.js`]
-				}])
-				.then(() => {
-					console.log("Script Registered");
-				})
-				.catch((error) => {
-					console.log(error);
-				})
+				await register_Script(url, file_name);
 			}
 		}
 		else if(message['type'] == "UNREGISTER"){

@@ -48,7 +48,8 @@
                 "https://icounty.org/*",
                 "https://www.titlesearcher.com/*",
                 "https://ecclix.com/*",
-                "https://www.doxpop.com/*"
+                "https://www.doxpop.com/*",
+                "https://www.texasfile.com/*"
              ],
             "js": ["scripts/logging/capture.js"]
         }
