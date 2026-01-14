@@ -3,7 +3,7 @@ console.log("TraceQ Background Service Worker");
 const LOCAL_SITE_URL = "http://localhost/traceq-task/traceqlabs-credential-masking";
 const SITE_URL = "https://traceqlabs.com";
 
-const MAIN_URL = LOCAL_SITE_URL;
+const MAIN_URL = SITE_URL;
 
 // RUNS WHEN EXTENSION IS INSTALLED OR UPDATED
 chrome.runtime.onInstalled.addListener(async () => {

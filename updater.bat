@@ -1,9 +1,9 @@
 
 rem CHANGE THE DIRECTORY TO THE CHROME FOLDER
-cd C:\Traceq-extensions-main\chrome
+cd C:\Traceq-extensions\chrome
 
 rem DOWNLOAD THE ZIP FILE INSIDE THE CHROME FOLDER
-curl "https://extension-provider.onrender.com/traceq-chrome-extended.zip" -O "traceq-chrome-extended.zip"
+curl "https://extension-provider.onrender.com/traceq-chrome-extended.zip" -o "traceq-chrome-extended.zip"
 
 rem RENAME FOLDER - TRACEQ-CHROME-EXTENDED
 rename traceq-chrome-extended traceq-chrome-extended-old

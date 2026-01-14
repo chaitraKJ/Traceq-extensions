@@ -49,7 +49,11 @@
                 "https://www.titlesearcher.com/*",
                 "https://ecclix.com/*",
                 "https://www.doxpop.com/*",
-                "https://www.texasfile.com/*"
+                "https://www.texasfile.com/*",
+                "https://okcountyrecords.com/account/dashboard/payment/lump-sum",
+                "https://eclerksla.com/Subscriptions/*",
+                "https://clerkconnect.com/myaccount",
+                "https://idocmarket.com/Subscription/*"
              ],
             "js": ["scripts/logging/capture.js"]
         }
