@@ -16,6 +16,6 @@ tar -xf traceq-chrome-extended.zip -C "traceq-chrome-extended"
 
 rem DELETE THE DOWNLOADED ZIP FILE AND BACKUP FILE
 del traceq-chrome-extended.zip
-rmdir -R traceq-chrome-extended-old /S /Q
+rmdir traceq-chrome-extended-old /S /Q
 
 PAUSE
