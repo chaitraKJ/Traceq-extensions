@@ -32,29 +32,37 @@ function get_the_credentials(){
 
 				// CHANGE MAIN PAGE MAIN PAGE
 				const frame_1 = await page_promise();
-				frame_1.src = 'https://www.ustitlesearch.net/logon.asp?';
+				frame_1.src = 'https://www.ustitlesearch.net/logon.asp?';			
 
 				const frame_2 = await page_promise();
-				const inputs = iframeRef(frame_2)?.querySelectorAll("form input");
-				inputs.forEach((input, i) => {
-					let name = input.getAttribute("name");
-					if(name == "username"){
-						username_input = input;
+
+				let interval = setInterval(() => {
+					const inputs = iframeRef(frame_2)?.querySelectorAll("form input");
+					if(inputs && inputs.length >= 2){
+						clearInterval(interval);
+
+						const inputs = iframeRef(frame_2)?.querySelectorAll("form input");
+						inputs.forEach((input, i) => {
+							let name = input.getAttribute("name");
+							if(name == "username"){
+								username_input = input;
+							}
+							else if(name == "password"){
+								password_input = input
+							}
+						})
+
+						Static_global.password_input = password_input;
+						var myp5 = new p5(s);
+
+						username_input.setAttribute("readonly", true);
+						password_input.setAttribute("readonly", true);
+						password_input.style.filter = "blur(5px)";
+
+						username_input.value = atob(username);
+						password_input.value = atob(password);
 					}
-					else if(name == "password"){
-						password_input = input
-					}
-				})
-
-				Static_global.password_input = password_input;
-				var myp5 = new p5(s);
-
-				username_input.setAttribute("readonly", true);
-				password_input.setAttribute("readonly", true);
-				password_input.style.filter = "blur(5px)";
-
-				username_input.value = atob(username);
-				password_input.value = atob(password);
+				}, 1000);
 			}
 		}
 		catch(error){
