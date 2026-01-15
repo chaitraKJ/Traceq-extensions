@@ -58,6 +58,9 @@ class Capture{
 			else if(obj.url.includes("idocmarket.com")){
 				obj.idocmarket();
 			}
+			else if(obj.url.includes("searchiqs.com")){
+				obj.searchiqs();
+			}
 		}
 		catch(error){ console.log(error); }
 	}
@@ -360,6 +363,25 @@ class Capture{
 			}
 		}
 		catch(error){ console.log(error); }		
+	}
+	searchiqs(){
+		const event = () => {
+			try{
+				let amount = document.querySelector("#cboSelectAmt")?.value;
+				this.send_activity("SUBSCRIPTION", "SEARCHIQS", "$"+amount);
+			}
+			catch(error){ console.log(error); }	
+		}
+		let interval = setInterval(() => {
+			try{
+				const btn = document.querySelector("#btnProcessPayment");
+				if(btn){
+					btn.removeEventListener("click", event);
+					btn.addEventListener("click", event);
+				}
+			}
+			catch(error){ console.log(error); }	
+		}, 2000);	
 	}
 	async send_activity(activity, application="", amount=null){
 		try{

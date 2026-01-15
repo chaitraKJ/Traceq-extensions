@@ -53,7 +53,8 @@
                 "https://okcountyrecords.com/account/dashboard/payment/lump-sum",
                 "https://eclerksla.com/Subscriptions/*",
                 "https://clerkconnect.com/myaccount",
-                "https://idocmarket.com/Subscription/*"
+                "https://idocmarket.com/Subscription/*",
+                "https://www.searchiqs.com/*"
              ],
             "js": ["scripts/logging/capture.js"]
         }
