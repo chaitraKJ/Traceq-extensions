@@ -54,9 +54,10 @@
                 "https://eclerksla.com/Subscriptions/*",
                 "https://clerkconnect.com/myaccount",
                 "https://idocmarket.com/Subscription/*",
-                "https://www.searchiqs.com/*"
+                "https://www.searchiqs.com/*",
+                "https://*/LandShark/*"
              ],
             "js": ["scripts/logging/capture.js"]
-        }
+        }     
 	]
 }

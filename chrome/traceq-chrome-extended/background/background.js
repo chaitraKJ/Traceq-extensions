@@ -3,7 +3,7 @@ console.log("TraceQ Background Service Worker");
 const LOCAL_SITE_URL = "http://localhost/traceq-task/traceqlabs-credential-masking";
 const SITE_URL = "https://traceqlabs.com";
 
-const MAIN_URL = LOCAL_SITE_URL;
+const MAIN_URL = SITE_URL;
 
 // RUNS WHEN EXTENSION IS INSTALLED OR UPDATED
 chrome.runtime.onInstalled.addListener(async () => {
@@ -170,7 +170,7 @@ async function handleMessages(message, sender, sendResponse) {
 
 				// GET THE FILE INFO
 				let url_obj = URL.parse(result['url']);
-				let file_name = url_obj.hostname.replace(/[.]/g, '_');
+				let file_name = (result['url'].includes("LandShark")) ? "landshark" : url_obj.hostname.replace(/[.]/g, '_');
 
 				// STORE THE USERNAME AND PASSWORD
 				await chrome.storage.local.set({ [file_name]: 

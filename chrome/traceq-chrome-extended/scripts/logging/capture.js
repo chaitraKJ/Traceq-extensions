@@ -4,6 +4,7 @@ class Capture{
 	constructor(){
 		this.user = "";	 
 		this.url = "";
+		this.full_url = "";
 		
 		this.body = document.querySelector('body');
 
@@ -24,6 +25,7 @@ class Capture{
 	}
 	get_website_info(){
 		this.url = window.origin;
+		this.full_url = window.location.href;
 	}
 	inject_logger(){
 		try{
@@ -60,6 +62,10 @@ class Capture{
 			}
 			else if(obj.url.includes("searchiqs.com")){
 				obj.searchiqs();
+			}
+
+			if(obj.full_url.includes("LandShark")){ 
+				obj.landshark();
 			}
 		}
 		catch(error){ console.log(error); }
@@ -382,6 +388,32 @@ class Capture{
 			}
 			catch(error){ console.log(error); }	
 		}, 2000);	
+	}
+	landshark(){
+		let amount = "";
+		let amount_event = () => {
+			try{
+				const tds = document.querySelectorAll(".modal table tbody td");
+				tds.forEach((td, i) => {
+					let text = td.textContent;
+					if(text && text.includes("Total")){
+						amount = td.nextElementSibling?.textContent.replace(/[ ]/g, '');
+					}
+				});
+				this.send_activity("SEARCH", "LANDSHARK", amount);
+			}
+			catch(error){ console.log(error); }			
+		}
+		let amount_interval = setInterval(() => {
+			try{
+				const next_btn = document.querySelector(".modal .modal-footer .btn-primary");
+				if(next_btn && next_btn.textContent.includes('Preauthorization')){  
+					next_btn.removeEventListener("click", amount_event);
+					next_btn.addEventListener("click", amount_event);
+				}
+			}
+			catch(error){ console.log(error); }
+		}, 2000);
 	}
 	async send_activity(activity, application="", amount=null){
 		try{
