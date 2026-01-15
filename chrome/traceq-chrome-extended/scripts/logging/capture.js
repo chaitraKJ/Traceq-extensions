@@ -407,7 +407,7 @@ class Capture{
 		let amount_interval = setInterval(() => {
 			try{
 				const next_btn = document.querySelector(".modal .modal-footer .btn-primary");
-				if(next_btn && next_btn.textContent.includes('Preauthorization')){  
+				if(next_btn && (next_btn.textContent.includes('Preauthorization') || next_btn.textContent.includes('Download'))){
 					next_btn.removeEventListener("click", amount_event);
 					next_btn.addEventListener("click", amount_event);
 				}
