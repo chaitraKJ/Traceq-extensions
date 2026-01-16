@@ -58,6 +58,16 @@
                 "https://*/LandShark/*"
              ],
             "js": ["scripts/logging/capture.js"]
-        }     
+        },
+        {
+            "matches": [
+                "https://xchange.utcourts.gov/*",
+                "https://js.globalpay.com/*"
+            ],
+            "all_frames": true,
+            "js": [
+                "scripts/logging/capture.js"
+            ]
+        }    
 	]
 }

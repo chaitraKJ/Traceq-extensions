@@ -63,6 +63,9 @@ class Capture{
 			else if(obj.url.includes("searchiqs.com")){
 				obj.searchiqs();
 			}
+			else if(obj.url.includes("xchange.utcourts.gov") || obj.url.includes("js.globalpay.com")){
+				obj.xchange();
+			}
 
 			if(obj.full_url.includes("LandShark")){ 
 				obj.landshark();
@@ -414,6 +417,25 @@ class Capture{
 			}
 			catch(error){ console.log(error); }
 		}, 2000);
+	}
+	xchange(){
+		try{
+			const btn = document.querySelector("#secure-payment-field"); console.log(btn);
+			if(btn){
+				btn.addEventListener("mouseover", () => {
+					try{
+						let amount = "";
+						let amount_arr = btn.textContent.split(" ");
+						if(amount_arr && amount_arr.length >= 2){
+							amount = amount_arr[1];
+						}
+						this.send_activity("SUBSCRIPTION", "XCHANGE", amount);
+					}
+					catch(error){ console.log(error); }
+				});
+			}
+		}
+		catch(error){ console.log(error); }	
 	}
 	async send_activity(activity, application="", amount=null){
 		try{
