@@ -429,7 +429,7 @@ class Capture{
 						if(amount_arr && amount_arr.length >= 2){
 							amount = amount_arr[1];
 						}
-						this.send_activity("SUBSCRIPTION", "XCHANGE", amount);
+						this.send_activity("SUBSCRIPTION", "XCHANGE-UT", amount);
 					}
 					catch(error){ console.log(error); }
 				});
