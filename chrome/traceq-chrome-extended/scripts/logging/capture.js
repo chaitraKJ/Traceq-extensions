@@ -420,7 +420,7 @@ class Capture{
 	}
 	xchange(){
 		try{
-			const btn = document.querySelector("#secure-payment-field"); console.log(btn);
+			const btn = document.querySelector("#secure-payment-field");
 			if(btn){
 				btn.addEventListener("click", () => {
 					try{
