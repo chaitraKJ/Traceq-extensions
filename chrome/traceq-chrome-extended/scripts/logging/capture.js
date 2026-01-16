@@ -422,7 +422,7 @@ class Capture{
 		try{
 			const btn = document.querySelector("#secure-payment-field"); console.log(btn);
 			if(btn){
-				btn.addEventListener("mouseover", () => {
+				btn.addEventListener("click", () => {
 					try{
 						let amount = "";
 						let amount_arr = btn.textContent.split(" ");
