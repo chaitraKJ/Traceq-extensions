@@ -91,18 +91,14 @@ class Capture{
 		});
 	}
 	icounty(){
-		const FORM_ID = "Payment_Card_Info";
-		const SUBMIT_BTN_ID = "btnSubmit";
-		const AMOUNT_ID = "lblCharges";
-
-		document.querySelector(`#${FORM_ID} #${SUBMIT_BTN_ID}`)?.addEventListener("click", (e) => {
+		document.querySelector(`#Payment_Card_Info #btnSubmit`)?.addEventListener("click", (e) => {
 			try{
-				const amount_div = document.getElementById(AMOUNT_ID);
+				const amount_div = document.getElementById("lblCharges");
 				let amount = "";
 				if(amount_div){
 					const table_tbody = amount_div?.querySelector("table tbody");
 					if(table_tbody){
-						const amount = table_tbody?.lastElementChild?.querySelector('td')?.textContent.trim();
+						amount = table_tbody?.lastElementChild?.querySelector('td')?.textContent.trim();
 					}
 				}
 				this.send_activity("SUBSCRIPTION", "ICOUNTY", amount);
