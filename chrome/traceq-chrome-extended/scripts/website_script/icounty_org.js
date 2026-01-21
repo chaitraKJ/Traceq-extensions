@@ -14,17 +14,26 @@ function get_the_credentials(){
 					password_input = document.querySelector("form input[name='loginModel.password']");	
 
 					if(username_input && password_input){
-						clearInterval(interval);
-
+						clearInterval(interval);				
+						
 						Static_global.password_input = password_input;
 						var myp5 = new p5(s);
 
-						username_input.setAttribute("readonly", true);
-						password_input.setAttribute("readonly", true);
-						password_input.style.filter = "blur(5px)";
-
+						username_input.focus();
+						document.execCommand('insertText', false, 'Simulated typing here!');					
 						username_input.value = atob(username);
-						password_input.value = atob(password);
+						username_input.dispatchEvent(new Event("input", { bubbles: true }));						
+						username_input.setAttribute("readonly", true);
+
+						password_input.focus();
+						document.execCommand('insertText', false, 'Simulated typing here!');											
+						password_input.style.filter = "blur(5px)";	
+						password_input.value = atob(password);							
+						password_input.dispatchEvent(new Event("input", { bubbles: true }));					
+						password_input.setAttribute("readonly", true);
+
+						password_input.closest("div").click();
+
 					}
 				}, 1000);
 				
