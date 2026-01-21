@@ -33,7 +33,6 @@ function get_the_credentials(){
 						password_input.setAttribute("readonly", true);
 
 						password_input.closest("div").click();
-
 					}
 				}, 1000);
 				
