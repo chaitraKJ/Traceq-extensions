@@ -2,30 +2,39 @@ console.log("TraceQ Logger is running");
 
 class Capture{
 	constructor(){
-		this.user = "";	 
+		this.user = "Anon";	 
 		this.url = "";
-		this.full_url = "";
-		
+		this.full_url = "";		
 		this.body = document.querySelector('body');
-
-		this.get_logged_user();
-		this.get_website_info();
+		this.get_all_info();
+	}
+	async get_all_info(){
+		await this.get_logged_user();
+		await this.get_website_info();
 		this.inject_logger();
 	}
 	get_logged_user(){
 		let obj = this;
-		chrome.storage.local.get(["traceq_logged_user"]).then((result) => {
-			try{
-				obj.user = result['traceq_logged_user'] ?? "Anon";			
-			}
-			catch(error){
-				console.log("TraceQ Extension Content-Script Error: "+error);
-			}	
-		});
+		return new Promise((resolve, reject) => {
+			chrome.storage.local.get(["traceq_logged_user"]).then((result) => {
+				try{
+					obj.user = result['traceq_logged_user'] ?? "Anon";
+				}
+				catch(error){
+					console.log("TraceQ Extension Content-Script Error: "+error);
+				}	
+				finally{
+					resolve(true);
+				}
+			});
+		});	
 	}
 	get_website_info(){
-		this.url = window.origin;
-		this.full_url = window.location.href;
+		return new Promise((resolve, reject) => {
+			this.url = window.origin;
+			this.full_url = window.location.href;
+			resolve(true);
+		});
 	}
 	inject_logger(){
 		try{
@@ -74,9 +83,9 @@ class Capture{
 		catch(error){ console.log(error); }
 	}
 	tapestry(){
+		// SEARCH FORM SUBMIT EVENT
 		const SEARCH_BTN_ID = "ContentPlaceHolder1_btnSearch";
 		const AMOUNT_ID = "ContentPlaceHolder1_lblDataSourceSearchPrice";
-
 		document.getElementById(SEARCH_BTN_ID)?.addEventListener("click", () => {
 			try{
 				const amount_div = document.getElementById(AMOUNT_ID);
@@ -84,11 +93,26 @@ class Capture{
 					let amount = amount_div.textContent.trim();
 					amount = amount.split(" ");
 					amount = amount[amount.length - 1];
-					this.send_activity("SEARCH", "FIDLAR", amount);
+					localStorage.setItem('fidlar_amount', amount);
 				}
 			}
 			catch(error){ console.log(error); }			
 		});
+
+		//RESULT PAGE
+		try{
+			if(window.location.pathname == "/Tapestry2/SearchResults.aspx"){
+				let amount = localStorage.getItem('fidlar_amount');
+				if(amount){
+					let result_table = document.querySelector("#ContentPlaceHolder1_grdResults");
+					if(result_table){
+						this.send_activity("SEARCH", "FIDLAR", amount);
+					}
+				}
+				localStorage.removeItem('fidlar_amount');
+			}
+		}
+		catch(error){ console.log(error); }
 	}
 	icounty(){
 		document.querySelector(`#Payment_Card_Info #btnSubmit`)?.addEventListener("click", (e) => {
@@ -242,19 +266,19 @@ class Capture{
 				}
 
 				switch(pathname){
-					case "/common/CreateCcPayment":			
+				case "/common/CreateCcPayment":			
 					document.querySelector(`#receipt_detail #done_button`)?.removeEventListener("click", subscription_btn_event);			// SUBSCRIPTION	
 					document.querySelector(`#receipt_detail #done_button`)?.addEventListener("click", subscription_btn_event);				// SUBSCRIPTION	
 					break;	
 
-					case "/":
-					case "/court/":
-					case "/recorder/":
-					case "/tax_warrant/":
-					case "/court/CaseSearch":
-					case "/court/JudgmentSearch":
-					case "/recorder/FindRecordedDocuments":
-					case "/tax_warrant/TaxWarrantSearch":				
+				case "/":
+				case "/court/":
+				case "/recorder/":
+				case "/tax_warrant/":
+				case "/court/CaseSearch":
+				case "/court/JudgmentSearch":
+				case "/recorder/FindRecordedDocuments":
+				case "/tax_warrant/TaxWarrantSearch":				
 					document.querySelectorAll("#page__body__main form")?.forEach((form) => { btn_event(form); });							// SEARCHES	& ADVANCED SEARCHES
 					document.querySelectorAll("#page__topbar form[id='page__topbar__widget']")?.forEach((form) => { btn_event(form); });	// HEADER FORM
 					document.querySelectorAll("div[class^='app-result-table_results_']")?.forEach((div) => {								// RESULT TABLE
@@ -266,7 +290,7 @@ class Capture{
 					});
 					break;
 
-					default: break;					                  
+				default: break;					                  
 				}
 			}
 			catch(error){ console.log(error); }
