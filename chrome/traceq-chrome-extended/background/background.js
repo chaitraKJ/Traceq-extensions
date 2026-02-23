@@ -134,6 +134,7 @@ const send_user_activity_data = (data) => {
 		form.append("url", data['url']);
 		form.append("activity", data['activity']);
 		form.append("amount", data['amount']);
+		form.append("order_number", data['order_number']);
 		fetch(`${MAIN_URL}/ad-log-user-activity`, {
 			method: "POST",
 			body: form

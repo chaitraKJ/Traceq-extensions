@@ -90,26 +90,46 @@ class Capture{
 			try{
 				const amount_div = document.getElementById(AMOUNT_ID);
 				if(amount_div){
-					let amount = amount_div.textContent.trim();
-					amount = amount.split(" ");
-					amount = amount[amount.length - 1];
-					localStorage.setItem('fidlar_amount', amount);
+					// CHARGE PER SEARCH
+					let amount = amount_div.textContent.trim();					
+					amount = amount.replace(/[a-zA-Z$ ]/g, '');
+
+					// SALES TAX PER SEARCH
+					let tax_amount = 0;
+					let tax_div = document.getElementById("ContentPlaceHolder1_lblSalesTax");
+					if(tax_div){
+						let tax_str = tax_div.textContent.trim();
+						tax_amount = tax_str.replace(/[a-zA-Z%$ ]/g, '');
+					}
+
+					// ORDER NUMBER
+					let order_number = "";
+					let order_div = document.getElementById("ContentPlaceHolder1_txtOrderNumber");
+					if(order_div){
+						order_number = order_div?.value;
+					}
+
+					amount = (+amount * ((100 + +tax_amount) / 100)).toFixed(2);
+					localStorage.setItem('fidlar_amount', '$'+amount);
+					localStorage.setItem('fidlar_order_number', order_number);
 				}
 			}
-			catch(error){ console.log(error); }			
+			catch(error){ console.log(error); }
 		});
 
 		//RESULT PAGE
 		try{
 			if(window.location.pathname == "/Tapestry2/SearchResults.aspx"){
 				let amount = localStorage.getItem('fidlar_amount');
+				let order_number = localStorage.getItem('fidlar_order_number');
 				if(amount){
 					let result_table = document.querySelector("#ContentPlaceHolder1_grdResults");
 					if(result_table){
-						this.send_activity("SEARCH", "FIDLAR", amount);
+						this.send_activity("SEARCH", "FIDLAR", amount, order_number);
 					}
 				}
 				localStorage.removeItem('fidlar_amount');
+				localStorage.removeItem('fidlar_order_number');
 			}
 		}
 		catch(error){ console.log(error); }
@@ -457,14 +477,15 @@ class Capture{
 		}
 		catch(error){ console.log(error); }	
 	}
-	async send_activity(activity, application="", amount=null){
+	async send_activity(activity, application="", amount=null, order_number=""){
 		try{
 			const data = {
 				user: this.user,
 				application: application,
 				url: this.url,
 				activity: activity,
-				amount: amount
+				amount: amount,
+				order_number:order_number
 			};
 			const message = {
 				type: "USER_ACTIVITY",
